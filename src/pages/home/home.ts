@@ -32,22 +32,47 @@ export class HomePage {
       loader.dismiss();
     }, (error) => {
       console.error(error);
+      loader.dismiss();
     });
   }
 
-  ionViewDidLoad() {    
+  ionViewDidLoad() {
   }
 
-  bookMeNext() {
-    if (this.queue.find(item => item.id == "joaqcid")) {
+  alredyInQueue(): boolean {
+    return this.queue.find(item => item.id == this.user.social.google.uid);
+  }
+
+  unBookMe() {
+    if (this.alredyInQueue()) {
       let alert = this.alertCtrl.create({
-        title: 'Oops!',
-        subTitle: 'Your user is already in the queue!',
-        buttons: ['OK']
+        title: 'Un book me',
+        subTitle: 'Are you sure you want to quit the queue?',
+        buttons: [
+          {
+            text: 'Cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Ok',
+            handler: () => {
+              this.db.collection("items").remove({ id: this.user.social.google.uid })
+            }
+          }
+        ]
       });
       alert.present();
     }
-    else if(!this.user.social.google){
+  }
+
+  loggedIn(): boolean {
+    return this.user.social.google == undefined;
+  }
+
+  bookMeNext() {
+    if (!this.loggedIn()) {
       let alert = this.alertCtrl.create({
         title: 'Oops!',
         subTitle: 'You need to sign before you can queue yourself',
@@ -55,8 +80,22 @@ export class HomePage {
       });
       alert.present();
     }
+    else if (this.alredyInQueue()) {
+      let alert = this.alertCtrl.create({
+        title: 'Oops!',
+        subTitle: 'Your user is already in the queue!',
+        buttons: ['OK']
+      });
+      alert.present();
+    }
     else {
-      this.db.collection('items').store({ id: "joaqcid", username: "joaqcid", time: Date.now() });
+      this.db.collection('items').store(
+        {
+          id: this.user.social.google.uid
+          , username: this.user.social.google.data.full_name
+          , avatar: this.user.social.google.data.profile_picture
+          , time: Date.now()
+        });
     }
   }
 }

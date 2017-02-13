@@ -7,18 +7,18 @@
 
     <ion-content>
         <ion-list>
-            <ion-item *ngIf="user.social.google">
+            <ion-item *ngIf="!loggedIn()">
                 <ion-avatar item-left>
                     <img [src]="user.social.google.data.profile_picture">
                 </ion-avatar>
                 <h2>{{user.social.google.data.full_name}}</h2>
                 <p>{{user.social.google.data.email}}</p>
             </ion-item>
-            <button ion-item *ngIf="user.social.google" (click)="googleLogOut()">
+            <button ion-item *ngIf="!loggedIn()" (click)="googleLogOut()">
                 <ion-icon name="log-out" item-left></ion-icon>
                 Log out
             </button>
-            <button ion-item *ngIf="!user.social.google" (click)="googleSignIn()">
+            <button ion-item *ngIf="loggedIn()" (click)="googleSignIn()">
                 <ion-icon name="log-in" item-left></ion-icon>
                 Log in with Google
             </button>

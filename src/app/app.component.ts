@@ -16,7 +16,7 @@ export class MyApp {
   rootPage = HomePage;
 
   constructor(public platform: Platform, public googleAuth: GoogleAuth, public user: User, public alertCtrl: AlertController) {
-    this.initializeApp();    
+    this.initializeApp();
   }
 
   initializeApp() {
@@ -26,6 +26,15 @@ export class MyApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
+  }
+
+  loggedIn(): boolean {
+    if (this.user == undefined)
+      return false;
+    if (this.user.social == undefined)
+      return false;
+
+    return this.user.social.google == undefined;
   }
 
   googleSignIn() {
@@ -50,7 +59,7 @@ export class MyApp {
         {
           text: 'Ok',
           handler: () => {
-            console.log('Ok clicked');            
+            console.log('Ok clicked');
             this.googleAuth.logout().then(() => {
               console.log("logout");
               GooglePlus.disconnect();
