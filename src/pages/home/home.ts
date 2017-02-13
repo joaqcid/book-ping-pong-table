@@ -5,6 +5,8 @@ import { QueueData } from '../../providers/queue-data'
 
 import { Database } from '@ionic/cloud-angular';
 import { AlertController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
+import { GoogleAuth, User } from '@ionic/cloud-angular';
 
 @Component({
   selector: 'page-home',
@@ -17,16 +19,23 @@ export class HomePage {
   constructor(public navCtrl: NavController
     , public queueData: QueueData
     , public db: Database
-    , public alertCtrl: AlertController) {
+    , public alertCtrl: AlertController
+    , public loadingCtrl: LoadingController
+    , public user: User) {
+    let loader = this.loadingCtrl.create({
+      content: "Loading queue..."
+    });
+    loader.present();
     this.db.connect();
     this.db.collection('items').watch().subscribe((items) => {
       this.queue = items;
+      loader.dismiss();
     }, (error) => {
       console.error(error);
     });
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad() {    
   }
 
   bookMeNext() {
@@ -38,8 +47,16 @@ export class HomePage {
       });
       alert.present();
     }
+    else if(!this.user.social.google){
+      let alert = this.alertCtrl.create({
+        title: 'Oops!',
+        subTitle: 'You need to sign before you can queue yourself',
+        buttons: ['OK']
+      });
+      alert.present();
+    }
     else {
-      this.db.collection('items').store({ id:"joaqcid", username: "joaqcid", time: Date.now() });
+      this.db.collection('items').store({ id: "joaqcid", username: "joaqcid", time: Date.now() });
     }
   }
 }
