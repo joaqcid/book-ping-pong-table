@@ -9,7 +9,7 @@
 
 <ion-content padding>
   <button ion-button (click)="bookMeNext()">Book me next!</button>
-  <button *ngIf="alreadyInQueue" ion-button (click)="unBookMe()">Unbook me</button>
+  <button *ngIf="alreadyInQueue()" ion-button (click)="unBookMe()">Unbook me</button>
   <ion-list *ngFor="let item of queue">
 
     <ion-item>

@@ -34,7 +34,7 @@ export class MyApp {
     if (this.user.social == undefined)
       return false;
 
-    return this.user.social.google == undefined;
+    return this.user.social.google != undefined;
   }
 
   googleSignIn() {

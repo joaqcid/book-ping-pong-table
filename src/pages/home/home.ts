@@ -39,12 +39,15 @@ export class HomePage {
   ionViewDidLoad() {
   }
 
-  alredyInQueue(): boolean {
-    return this.queue.find(item => item.id == this.user.social.google.uid);
+  alreadyInQueue(): boolean {    
+    if (this.loggedIn())
+      return this.queue.find(item => item.id == this.user.social.google.uid);
+
+    return false;
   }
 
   unBookMe() {
-    if (this.alredyInQueue()) {
+    if (this.alreadyInQueue()) {
       let alert = this.alertCtrl.create({
         title: 'Un book me',
         subTitle: 'Are you sure you want to quit the queue?',
@@ -68,7 +71,12 @@ export class HomePage {
   }
 
   loggedIn(): boolean {
-    return this.user.social.google == undefined;
+    if (this.user == undefined)
+      return false;
+    if (this.user.social == undefined)
+      return false;
+
+    return this.user.social.google != undefined;
   }
 
   bookMeNext() {
@@ -80,7 +88,7 @@ export class HomePage {
       });
       alert.present();
     }
-    else if (this.alredyInQueue()) {
+    else if (this.alreadyInQueue()) {
       let alert = this.alertCtrl.create({
         title: 'Oops!',
         subTitle: 'Your user is already in the queue!',
