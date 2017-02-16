@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 import { QueueData } from '../../providers/queue-data'
+import { LoadingProvider } from '../../providers/loading-provider'
 
 import { Database } from '@ionic/cloud-angular';
 import { AlertController } from 'ionic-angular';
@@ -20,12 +21,9 @@ export class HomePage {
     , public queueData: QueueData
     , public db: Database
     , public alertCtrl: AlertController
-    , public loadingCtrl: LoadingController
+    , public loadingProv: LoadingProvider
     , public user: User) {
-    let loader = this.loadingCtrl.create({
-      content: "Loading queue..."
-    });
-    loader.present();
+    loadingProv.show();
     this.db.connect();
     this.db.collection('items').watch().subscribe((items) => {
       this.queue = items;

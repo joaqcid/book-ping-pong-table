@@ -5,6 +5,7 @@ import { HomePage } from '../pages/home/home';
 import { QueueData } from '../providers/queue-data';
 import { LoginPage } from '../pages/login/login';
 import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+import { LoadingProvider } from '../providers/loading-provider';
 
 const cloudSettings: CloudSettings = {
   'core': {
@@ -36,6 +37,7 @@ const cloudSettings: CloudSettings = {
   ],
   providers: [
     QueueData
+    , LoadingProvider
     , [{ provide: ErrorHandler, useClass: IonicErrorHandler }]
   ]
 })

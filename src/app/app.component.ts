@@ -4,6 +4,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
+import { LoadingProvider } from '../providers/loading-provider';
 import { AlertController } from 'ionic-angular';
 import { GoogleAuth, User } from '@ionic/cloud-angular';
 import { GooglePlus } from 'ionic-native';
